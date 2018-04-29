@@ -45,6 +45,11 @@ public class BasicControls : MonoBehaviour {
         {
             transform.position += new Vector3(0, 0, -0.5f);
         }
+
+        if (Input.GetKey(KeyCode.Z))
+        {
+            //esta wea deberia disparar
+        }
     }
     
 }
