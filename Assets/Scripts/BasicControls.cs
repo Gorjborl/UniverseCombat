@@ -13,27 +13,38 @@ public class BasicControls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        Input.gyro.enabled = true;
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        
-            //Ship.transform.Translate(Input.acceleration.x * Time.deltaTime * HorizontalSpeed, 0, 0 );
-            Ship.transform.Rotate(0,-Input.gyro.rotationRateUnbiased.y, 0);
-            Ship.transform.Rotate(-Input.gyro.rotationRateUnbiased.x, 0, 0);
-            ChangeCamera();		
+        UserInput();
+            	
 	}
 
-    void ChangeCamera()
+    void UserInput()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Space))
+        //Keyboard Input for Test Purposes
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            ThirdCamera.gameObject.SetActive(true);
-            FPCamera.gameObject.SetActive(false);
-            
+            transform.position += new Vector3(-0.5f, 0, 0);
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.position += new Vector3(0.5f, 0, 0);
+        }
+
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.position += new Vector3(0, 0, 0.5f);
+        }
+
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.position += new Vector3(0, 0, -0.5f);
         }
     }
+    
 }
