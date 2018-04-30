@@ -16,7 +16,7 @@ public class BasicControls : MonoBehaviour {
     private Vector3 SpaceShipPosition;
 
     private int PlayerLives;
-    private int ForceShield;
+    public int ForceShield;
     public GameObject ShieldGreen;
     public GameObject ShieldYellow;
     public GameObject ShieldRed;
