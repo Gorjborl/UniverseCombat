@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FireShot1 : MonoBehaviour {
 
-    private GameObject fireball1;
+    public GameObject fireball1;
 	// Use this for initialization
 	void Start () {
 
@@ -14,12 +14,24 @@ public class FireShot1 : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        transform.position += new Vector3(0, 0, 0.4f);
+        transform.position += new Vector3(0, 0, 0.6f);
         if(transform.position.z > 65)
         {
-            Destroy(this,3);
+            Destroy(this.gameObject);
         }
 	}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        if (collision.gameObject.tag == "EnemyShip")
+        {
+            Debug.Log("cago");
+            DestroyObject(this.gameObject);
+            DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
+        }
+    }
+    
 
 
 }

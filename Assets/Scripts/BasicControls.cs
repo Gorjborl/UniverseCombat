@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BasicControls : MonoBehaviour {
 
@@ -8,14 +9,19 @@ public class BasicControls : MonoBehaviour {
 
     public GameObject Ship;
     public GameObject ShipParticle;
+    private Rigidbody ShipBody;
     private GameObject ShootFire1;
     private int HorizontalSpeed = 35;
     private Vector3 SpaceShipPosition;
+
+    private int PlayerLives;
 	// Use this for initialization
 	void Start () {
 
-        
-	}
+        Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
+        PlayerLives = 3;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -60,15 +66,15 @@ public class BasicControls : MonoBehaviour {
                 FireShoot1();
             }
 
-            if (Input.GetKeyDown(KeyCode.X))
+            /*if (Input.GetKeyDown(KeyCode.X))
             {
                 FirePlasma1();
             }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            DoublePlasma();
-        }
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                DoublePlasma();
+            }*/
 
     }
     
@@ -134,5 +140,24 @@ public class BasicControls : MonoBehaviour {
         GameObject ShootFire2 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "EnemyShip")
+        {
+            DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
+            PlayerLives--;
+            Debug.Log(PlayerLives.ToString());
 
+            if (PlayerLives == 0)
+            {
+                GameOver();
+            }
+        }
+    
+    }
+
+    void GameOver()
+    {
+        SceneManager.LoadScene("GameOver");
+    }
 }
