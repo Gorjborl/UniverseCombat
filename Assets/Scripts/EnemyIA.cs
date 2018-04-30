@@ -36,14 +36,5 @@ public class EnemyIA : MonoBehaviour {
         
 	}
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "PlayerShip")
-        {
-            Debug.Log("cagaste");
-        }
-
-    }
-
-
+    
 }

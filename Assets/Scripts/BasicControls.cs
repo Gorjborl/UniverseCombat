@@ -145,6 +145,7 @@ public class BasicControls : MonoBehaviour {
         if (collision.gameObject.tag == "EnemyShip")
         {
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
+            Instantiate(Resources.Load("Explosion"), transform.position + new Vector3 (0,0,6), Quaternion.identity);
             PlayerLives--;
             Debug.Log(PlayerLives.ToString());
 

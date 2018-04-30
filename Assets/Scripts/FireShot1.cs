@@ -5,6 +5,7 @@ using UnityEngine;
 public class FireShot1 : MonoBehaviour {
 
     public GameObject fireball1;
+    private Vector3 ColPosition;
 	// Use this for initialization
 	void Start () {
 
@@ -28,7 +29,9 @@ public class FireShot1 : MonoBehaviour {
         {
             Debug.Log("cago");
             DestroyObject(this.gameObject);
+            Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
+            
         }
     }
     
