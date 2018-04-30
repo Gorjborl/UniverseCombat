@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BasicControls : MonoBehaviour {
 
@@ -15,11 +16,21 @@ public class BasicControls : MonoBehaviour {
     private Vector3 SpaceShipPosition;
 
     private int PlayerLives;
+    private int ForceShield;
+    public GameObject ShieldGreen;
+    public GameObject ShieldYellow;
+    public GameObject ShieldRed;
+
+    public Text ScoreText;
+    public int Score;
 	// Use this for initialization
 	void Start () {
 
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
-        PlayerLives = 3;
+        PlayerLives = 1;
+        ForceShield = 3;
+
+        ScoreText.text = Score.ToString();
 
     }
 	
@@ -29,8 +40,10 @@ public class BasicControls : MonoBehaviour {
         UserInput();
         SpaceShipPosition = Ship.transform.position;
         ShipParticle.transform.position = Ship.transform.position;
+        ForceShieldStat();
+        ScoreText.text = Score.ToString();
 
-            
+
     }
 
     void UserInput()
@@ -146,19 +159,52 @@ public class BasicControls : MonoBehaviour {
         {
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
             Instantiate(Resources.Load("Explosion"), transform.position + new Vector3 (0,0,6), Quaternion.identity);
-            PlayerLives--;
-            Debug.Log(PlayerLives.ToString());
-
-            if (PlayerLives == 0)
+            if (ForceShield != 0)
+            {
+                ForceShield--;
+            } else if( ForceShield == 0)
             {
                 GameOver();
             }
+            
+            
         }
     
     }
 
+    void ForceShieldStat()
+    {
+        if (ForceShield == 3)
+        {
+            ShieldGreen.SetActive(true);
+            ShieldYellow.SetActive(false);
+            ShieldRed.SetActive(false);
+        }
+        if(ForceShield == 2)
+        {
+            ShieldGreen.SetActive(false);
+            ShieldYellow.SetActive(true);
+            ShieldRed.SetActive(false);
+        }
+        if(ForceShield == 1)
+        {
+            ShieldGreen.SetActive(false);
+            ShieldYellow.SetActive(false);
+            ShieldRed.SetActive(true);
+        }
+        if(ForceShield == 0)
+        {
+            ShieldGreen.SetActive(false);
+            ShieldYellow.SetActive(false);
+            ShieldRed.SetActive(false);
+            
+        }
+    }
+
     void GameOver()
     {
-        SceneManager.LoadScene("GameOver");
+        Application.LoadLevel("GameOver");
     }
+
+    
 }

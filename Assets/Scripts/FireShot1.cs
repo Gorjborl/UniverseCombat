@@ -6,10 +6,13 @@ public class FireShot1 : MonoBehaviour {
 
     public GameObject fireball1;
     private Vector3 ColPosition;
+    public int ShipsDestroyed = 0;
+    public int Score = 0;
 	// Use this for initialization
 	void Start () {
 
         fireball1 = this.GetComponent<GameObject>();
+        
 	}
 	
 	// Update is called once per frame
@@ -20,6 +23,8 @@ public class FireShot1 : MonoBehaviour {
         {
             Destroy(this.gameObject);
         }
+        
+        
 	}
 
     private void OnCollisionEnter(Collision collision)
@@ -27,13 +32,17 @@ public class FireShot1 : MonoBehaviour {
         
         if (collision.gameObject.tag == "EnemyShip")
         {
-            Debug.Log("cago");
+            
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
+            FindObjectOfType<BasicControls>().Score++;
+            
+            
             
         }
     }
+    
     
 
 
