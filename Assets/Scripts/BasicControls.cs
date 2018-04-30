@@ -5,9 +5,12 @@ using UnityEngine;
 public class BasicControls : MonoBehaviour {
 
 
-    
+
     public GameObject Ship;
+    public GameObject ShipParticle;
+    private GameObject ShootFire1;
     private int HorizontalSpeed = 35;
+    private Vector3 SpaceShipPosition;
 	// Use this for initialization
 	void Start () {
 
@@ -18,8 +21,11 @@ public class BasicControls : MonoBehaviour {
 	void Update () {
 
         UserInput();
-            	
-	}
+        SpaceShipPosition = Ship.transform.position;
+        ShipParticle.transform.position = Ship.transform.position;
+
+            
+    }
 
     void UserInput()
     {
@@ -49,12 +55,21 @@ public class BasicControls : MonoBehaviour {
                 CheckValidPosition();
             }
 
-            if (Input.GetKey(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
-                //esta wea deberia disparar
+                FireShoot1();
             }
-        
-        
+
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                FirePlasma1();
+            }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            DoublePlasma();
+        }
+
     }
     
 
@@ -96,4 +111,28 @@ public class BasicControls : MonoBehaviour {
             transform.position += new Vector3(0, 0, -1);
         }
     }
+
+    void FireShoot1()
+    {
+        SpaceShipPosition += new Vector3(0.1f, 0, 0f);
+        ShootFire1 = (GameObject)Instantiate(Resources.Load("FireBall1"), SpaceShipPosition, Quaternion.identity);
+        
+    }
+
+    void FirePlasma1()
+    {
+        SpaceShipPosition += new Vector3(0.1f, 0, 0f);
+        ShootFire1 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);
+
+    }
+
+    void DoublePlasma()
+    {
+        SpaceShipPosition += new Vector3(-1f, 0, 0f);
+        ShootFire1 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);
+        SpaceShipPosition += new Vector3(2f, 0, 0);
+        GameObject ShootFire2 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);
+    }
+
+
 }
