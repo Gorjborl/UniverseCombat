@@ -7,6 +7,9 @@ TagManager:
   - EnemyShip
   - PlayerShip
   - Shoot
+  - EnemyShot
+  - PowerUp
+  - ShieldUp
   layers:
   - Default
   - TransparentFX
@@ -16,11 +19,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerShot
+  - EnemyShot
+  - PlayerShip
+  - EnemyShip
+  - PowerUp
   - 
   - 
   - 

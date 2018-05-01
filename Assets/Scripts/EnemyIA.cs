@@ -4,29 +4,30 @@ using UnityEngine;
 
 public class EnemyIA : MonoBehaviour {
 
-    private bool Collider;
+    
     public GameObject EnemyShip;
     private bool Hit;
     private Transform Player;
 
-    private float ShotTimer = 1f;
+    private float ShotTimer = 0.001f;
     private Vector3 SpaceShipPosition;
+    private Vector3 ShootPosition;
+    private float Distance;
 
     private bool InsideArea;
 
 
 	// Use this for initialization
 	void Start () {
-
-        Rigidbody EnemyShipbody = this.GetComponent<Rigidbody>();
-        Player = GameObject.FindGameObjectWithTag("PlayerShip").transform;
-        SpaceShipPosition = EnemyShip.transform.position;
-
-
+         
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        SpaceShipPosition = EnemyShip.transform.position;
+        
 
         if (!Hit)
         {
@@ -41,41 +42,36 @@ public class EnemyIA : MonoBehaviour {
             DestroyObject(this.gameObject);
         }
 
-        InsideCombatArea();
-
-        ShootToPlayer();
-        
-        Debug.Log(InsideArea);
-        
+        ShootToPlayer();            
             
         
 	}
 
     void ShootToPlayer()
     {
-        if (InsideArea)
-        {
-
-            ShotTimer -= Time.deltaTime;
-            if (ShotTimer <= 0)
-            {
-                SpaceShipPosition += new Vector3(-0.1f, 0, 0f);
-                Instantiate(Resources.Load("FireBall2"), SpaceShipPosition, Quaternion.identity);
-                ShotTimer = 1f;
-            }
-            
-                
-        }
+        InsideCombatArea();
         
+        if(InsideArea)
+        {
+            ShotTimer -= Time.deltaTime;
+            if (ShotTimer <= 0 && InsideArea)
+            {
+                ShootPosition = SpaceShipPosition + new Vector3(0.1f, 0, -9.5f);
+                Instantiate(Resources.Load("FireBall2"), ShootPosition, Quaternion.identity);
+                ShotTimer = 1.5f;
+            }
+        }
+            
     }
 
     bool InsideCombatArea()
     {
-        if(transform.position.z <= 53)
+        if(this.transform.position.z <= 53)
         {
-            if (transform.position.z >= -7)
+            if (this.transform.position.z >= -7)
             {
                 InsideArea = true;
+                
             }
             
         } else 
@@ -86,4 +82,5 @@ public class EnemyIA : MonoBehaviour {
         return InsideArea;
 
     }
+        
 }

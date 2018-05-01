@@ -8,6 +8,8 @@ public class FireShot1 : MonoBehaviour {
     private Vector3 ColPosition;
     public int ShipsDestroyed = 0;
     public int Score = 0;
+
+    public Vector3 DropPos;
 	// Use this for initialization
 	void Start () {
 
@@ -31,19 +33,18 @@ public class FireShot1 : MonoBehaviour {
     {
         
         if (collision.gameObject.tag == "EnemyShip")
-        {
-            
+        {            
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
+            DropPos = transform.position;
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
             FindObjectOfType<BasicControls>().Score++;
-            
-            
-            
+            FindObjectOfType<PowerUp>().DropProb(DropPos);
         }
+        
     }
     
     
-
+    
 
 }

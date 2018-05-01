@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114298183690182120}
   - component: {fileID: 135745721990536106}
   - component: {fileID: 54142662987075762}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FireBall1
   m_TagString: Shoot
   m_Icon: {fileID: 0}
@@ -71,6 +71,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireball1: {fileID: 0}
+  ShipsDestroyed: 0
+  Score: 0
+  ForceShieldImprove: {fileID: 1591708020210936, guid: 66ba20960d27b2242a84e29bc5ab5400,
+    type: 2}
 --- !u!135 &135745721990536106
 SphereCollider:
   m_ObjectHideFlags: 1

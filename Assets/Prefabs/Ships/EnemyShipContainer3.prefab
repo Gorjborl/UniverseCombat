@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4157102996749346}
   - component: {fileID: 33767525343062878}
   - component: {fileID: 23265626738126018}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SpaceShip3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4035509035018762}
   - component: {fileID: 198467781673905032}
   - component: {fileID: 199104803309398458}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ShipIgnition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 114338457799714646}
   - component: {fileID: 65774080950436156}
   - component: {fileID: 54886242893292244}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemyShipContainer3
   m_TagString: EnemyShip
   m_Icon: {fileID: 0}

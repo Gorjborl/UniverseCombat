@@ -23,6 +23,8 @@ public class BasicControls : MonoBehaviour {
 
     public Text ScoreText;
     public int Score;
+
+    public GameObject ForceImprove;
 	// Use this for initialization
 	void Start () {
 
@@ -159,20 +161,21 @@ public class BasicControls : MonoBehaviour {
         {
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
             Instantiate(Resources.Load("Explosion"), transform.position + new Vector3 (0,0,6), Quaternion.identity);
-            if (ForceShield != 0)
-            {
-                ForceShield--;
-            } else if( ForceShield == 0)
-            {
-                GameOver();
-            }
+            UpdateForceShieldStat();
             
             
         }
+
+        if (collision.gameObject.tag == "ShieldUp")
+        {
+            UpgradeForceShield();
+            Destroy(GameObject.FindGameObjectWithTag("ShieldUp"));
+        }
+
     
     }
 
-    void ForceShieldStat()
+    public void ForceShieldStat()
     {
         if (ForceShield == 3)
         {
@@ -201,6 +204,30 @@ public class BasicControls : MonoBehaviour {
         }
     }
 
+    public void UpdateForceShieldStat()
+    {
+        if (ForceShield != 0)
+        {
+            ForceShield--;
+        }
+        else if (ForceShield == 0)
+        {
+            GameOver();
+        }
+    }
+
+    public void UpgradeForceShield()
+    {
+        if (ForceShield != 3)
+        {
+            ForceShield++;
+        }
+        else if (ForceShield == 3)
+        {
+            
+        }
+
+    }
     void GameOver()
     {
         Application.LoadLevel("GameOver");
