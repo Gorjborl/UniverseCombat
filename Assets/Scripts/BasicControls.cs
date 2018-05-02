@@ -8,6 +8,8 @@ public class BasicControls : MonoBehaviour {
 
 
 
+    public RawImage ShieldBar;
+
     public GameObject Ship;
     public GameObject ShipParticle;
     private Rigidbody ShipBody;
@@ -25,8 +27,8 @@ public class BasicControls : MonoBehaviour {
     public int Score;
 
     public GameObject ForceImprove;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
 
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
         PlayerLives = 1;
@@ -35,68 +37,69 @@ public class BasicControls : MonoBehaviour {
         ScoreText.text = Score.ToString();
 
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
 
         UserInput();
         SpaceShipPosition = Ship.transform.position;
         ShipParticle.transform.position = Ship.transform.position;
         ForceShieldStat();
         ScoreText.text = Score.ToString();
+        ShieldBarColor();
 
 
     }
 
     void UserInput()
     {
-       
-            //Keyboard Input for Test Purposes
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                transform.position += new Vector3(-1 * Time.deltaTime * HorizontalSpeed, 0, 0);
-                CheckValidPosition();
-            }
 
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                transform.position += new Vector3(1 * Time.deltaTime * HorizontalSpeed, 0, 0);
-                CheckValidPosition();
-            }
+        //Keyboard Input for Test Purposes
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.position += new Vector3(-1 * Time.deltaTime * HorizontalSpeed, 0, 0);
+            CheckValidPosition();
+        }
 
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                transform.position += new Vector3(0, 0, 1 * Time.deltaTime * HorizontalSpeed);
-                CheckValidPosition();
-            }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.position += new Vector3(1 * Time.deltaTime * HorizontalSpeed, 0, 0);
+            CheckValidPosition();
+        }
 
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                transform.position += new Vector3(0, 0, -1 * Time.deltaTime * HorizontalSpeed);
-                CheckValidPosition();
-            }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.position += new Vector3(0, 0, 1 * Time.deltaTime * HorizontalSpeed);
+            CheckValidPosition();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                FireShoot1();
-            }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.position += new Vector3(0, 0, -1 * Time.deltaTime * HorizontalSpeed);
+            CheckValidPosition();
+        }
 
-            /*if (Input.GetKeyDown(KeyCode.X))
-            {
-                FirePlasma1();
-            }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            FireShoot1();
+        }
 
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                DoublePlasma();
-            }*/
+        /*if (Input.GetKeyDown(KeyCode.X))
+        {
+            FirePlasma1();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            DoublePlasma();
+        }*/
 
     }
-    
+
 
     void CheckValidPosition()
     {
-        if ( transform.position.x >= -19)
+        if (transform.position.x >= -19)
         {
 
         } else
@@ -105,7 +108,7 @@ public class BasicControls : MonoBehaviour {
         }
 
 
-        if(transform.position.x <= 19)
+        if (transform.position.x <= 19)
         {
 
         } else
@@ -137,7 +140,7 @@ public class BasicControls : MonoBehaviour {
     {
         SpaceShipPosition += new Vector3(0.1f, 0, 0f);
         ShootFire1 = (GameObject)Instantiate(Resources.Load("FireBall1"), SpaceShipPosition, Quaternion.identity);
-        
+
     }
 
     void FirePlasma1()
@@ -160,10 +163,10 @@ public class BasicControls : MonoBehaviour {
         if (collision.gameObject.tag == "EnemyShip")
         {
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
-            Instantiate(Resources.Load("Explosion"), transform.position + new Vector3 (0,0,6), Quaternion.identity);
+            Instantiate(Resources.Load("Explosion"), transform.position + new Vector3(0, 0, 6), Quaternion.identity);
             UpdateForceShieldStat();
-            
-            
+
+
         }
 
         if (collision.gameObject.tag == "ShieldUp")
@@ -172,7 +175,36 @@ public class BasicControls : MonoBehaviour {
             Destroy(GameObject.FindGameObjectWithTag("ShieldUp"));
         }
 
-    
+
+    }
+
+    void ShieldBarColor()
+    {
+        if (ForceShield == 3)
+        {
+            ShieldBar.gameObject.SetActive(true);
+            ShieldBar.color = new Color32(66, 244, 122, 100);
+
+        }
+
+        if (ForceShield == 2)
+        {
+            ShieldBar.gameObject.SetActive(true);
+            ShieldBar.color = new Color32(222, 239, 31, 100);
+        }
+
+        if (ForceShield == 1)
+        {
+            ShieldBar.gameObject.SetActive(true);
+            ShieldBar.color = new Color32(237, 35, 35, 100);
+        }
+
+        if (ForceShield == 0)
+        {
+            ShieldBar.gameObject.SetActive(false);
+        }
+
+
     }
 
     public void ForceShieldStat()
@@ -182,6 +214,7 @@ public class BasicControls : MonoBehaviour {
             ShieldGreen.SetActive(true);
             ShieldYellow.SetActive(false);
             ShieldRed.SetActive(false);
+            
         }
         if(ForceShield == 2)
         {
@@ -212,8 +245,19 @@ public class BasicControls : MonoBehaviour {
         }
         else if (ForceShield == 0)
         {
-            GameOver();
+            if (PlayerLives != 0 && ForceShield == 0)
+            {
+                PlayerLives--;
+                this.transform.position = new Vector3(0, 0, 0);
+                ForceShield = 3;
+            }
+            if( PlayerLives == 0 && ForceShield == 0)
+            {
+                GameOver();
+            }
+            
         }
+        Debug.Log(PlayerLives.ToString());
     }
 
     public void UpgradeForceShield()

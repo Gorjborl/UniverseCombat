@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4299763744662762}
   - component: {fileID: 65485442547849420}
   - component: {fileID: 54264888810268668}
+  - component: {fileID: 114892709963676124}
   m_Layer: 12
   m_Name: ImproveForceShieldd
   m_TagString: ShieldUp
@@ -140,3 +141,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.2, y: 2, z: 8.5}
   m_Center: {x: 0, y: 0, z: 1.752471}
+--- !u!114 &114892709963676124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1591708020210936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d5ba40d8a05e24db1ac88c82de9c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
