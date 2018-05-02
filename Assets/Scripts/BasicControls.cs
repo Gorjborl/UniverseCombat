@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class BasicControls : MonoBehaviour {
 
 
-
-    public RawImage ShieldBar;
+    public Image ShieldRadialBar;
+    private float FillTimer = 0.5f;
+    private bool PlayerHit;
+    private bool ShieldUpgrade;
 
     public GameObject Ship;
     public GameObject ShipParticle;
@@ -25,6 +27,7 @@ public class BasicControls : MonoBehaviour {
 
     public Text ScoreText;
     public int Score;
+    public Text Lives;
 
     public GameObject ForceImprove;
     // Use this for initialization
@@ -33,7 +36,7 @@ public class BasicControls : MonoBehaviour {
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
         PlayerLives = 1;
         ForceShield = 3;
-
+        Lives.text = PlayerLives.ToString();
         ScoreText.text = Score.ToString();
 
     }
@@ -45,8 +48,12 @@ public class BasicControls : MonoBehaviour {
         SpaceShipPosition = Ship.transform.position;
         ShipParticle.transform.position = Ship.transform.position;
         ForceShieldStat();
-        ScoreText.text = Score.ToString();
         ShieldBarColor();
+        ShieldBarDecrease();
+        ShieldBarIncrease();
+        ScoreText.text = Score.ToString();
+        Lives.text = PlayerLives.ToString();
+
 
 
     }
@@ -179,32 +186,96 @@ public class BasicControls : MonoBehaviour {
     }
 
     void ShieldBarColor()
+    {        
+            if (ForceShield == 3)
+            {
+                //ShieldRadialBar.fillAmount = 1f;   
+                ShieldRadialBar.color = new Color32(66, 244, 122, 100);
+                
+
+            }
+
+            if (ForceShield == 2)
+            {                
+                //ShieldRadialBar.fillAmount = 0.67f ;                
+                ShieldRadialBar.color = new Color32(255, 242, 0, 100);
+                
+            }
+
+            if (ForceShield == 1)
+            {
+            
+                //ShieldRadialBar.fillAmount = 0.33f;                
+                ShieldRadialBar.color = new Color32(237, 35, 35, 100);
+                
+            }
+
+            if (ForceShield == 0)
+            {
+                //ShieldRadialBar.fillAmount = 0;
+                
+            }
+
+    }
+
+    void ShieldBarDecrease()
     {
-        if (ForceShield == 3)
+        if (PlayerHit)
         {
-            ShieldBar.gameObject.SetActive(true);
-            ShieldBar.color = new Color32(66, 244, 122, 100);
+            if( ForceShield == 2)
+            {
+                if(ShieldRadialBar.fillAmount >= 0.67f)
+                {
+                    ShieldRadialBar.fillAmount -= 0.33f * Time.deltaTime;
+                }
+            }
 
+            if (ForceShield == 1)
+            {
+                if (ShieldRadialBar.fillAmount >= 0.33f)
+                {
+                    ShieldRadialBar.fillAmount -= 0.33f * Time.deltaTime;
+                }
+            }
+
+            if (ForceShield == 0)
+            {
+                if (ShieldRadialBar.fillAmount >= 0f)
+                {
+                    ShieldRadialBar.fillAmount -= 0.33f * Time.deltaTime;
+                }
+            }
         }
+    }
 
-        if (ForceShield == 2)
+    void ShieldBarIncrease()
+    {
+        if (ShieldUpgrade)
         {
-            ShieldBar.gameObject.SetActive(true);
-            ShieldBar.color = new Color32(222, 239, 31, 100);
+            if (ForceShield == 3)
+            {
+                if (ShieldRadialBar.fillAmount <= 1f)
+                {
+                    ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+                }
+            }
+            if (ForceShield == 2)
+            {
+                if (ShieldRadialBar.fillAmount <= 0.67f)
+                {
+                    ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+                }
+            }
+
+            if (ForceShield == 1)
+            {
+                if (ShieldRadialBar.fillAmount <= 0.33f)
+                {
+                    ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+                }
+            }
+            
         }
-
-        if (ForceShield == 1)
-        {
-            ShieldBar.gameObject.SetActive(true);
-            ShieldBar.color = new Color32(237, 35, 35, 100);
-        }
-
-        if (ForceShield == 0)
-        {
-            ShieldBar.gameObject.SetActive(false);
-        }
-
-
     }
 
     public void ForceShieldStat()
@@ -239,9 +310,14 @@ public class BasicControls : MonoBehaviour {
 
     public void UpdateForceShieldStat()
     {
+        
         if (ForceShield != 0)
         {
             ForceShield--;
+            PlayerHit = true;
+            
+            
+
         }
         else if (ForceShield == 0)
         {
@@ -258,6 +334,7 @@ public class BasicControls : MonoBehaviour {
             
         }
         Debug.Log(PlayerLives.ToString());
+        
     }
 
     public void UpgradeForceShield()
@@ -265,6 +342,7 @@ public class BasicControls : MonoBehaviour {
         if (ForceShield != 3)
         {
             ForceShield++;
+            ShieldUpgrade = true;
         }
         else if (ForceShield == 3)
         {
@@ -277,5 +355,54 @@ public class BasicControls : MonoBehaviour {
         Application.LoadLevel("GameOver");
     }
 
-    
+    public void ShieldBarColorFill()
+    {
+        if (ForceShield == 3)
+        {
+            if (ShieldRadialBar.fillAmount <= 1)
+            {
+                ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+            }
+
+            ShieldRadialBar.color = new Color32(66, 244, 122, 100);
+
+        }
+
+        if (ForceShield == 2)
+        {
+
+            
+            if (ShieldRadialBar.fillAmount <= 0.67f)
+            {
+                ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+            }
+
+            ShieldRadialBar.color = new Color32(222, 239, 31, 100);
+        }
+
+        if (ForceShield == 1)
+        {
+
+            
+            if (ShieldRadialBar.fillAmount <= 0.33f)
+            {
+                ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+            }
+            ShieldRadialBar.color = new Color32(237, 35, 35, 100);
+        }
+
+        if (ForceShield == 0)
+        {
+            if (ShieldRadialBar.fillAmount >= 0)
+            {
+                ShieldRadialBar.fillAmount += 0.33f * Time.deltaTime;
+            }
+
+        }
+
+
+    }
+
+
+
 }
