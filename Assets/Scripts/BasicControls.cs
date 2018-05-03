@@ -326,6 +326,7 @@ public class BasicControls : MonoBehaviour {
                 PlayerLives--;
                 this.transform.position = new Vector3(0, 0, 0);
                 ForceShield = 3;
+                ShieldUpgrade = true;
             }
             if( PlayerLives == 0 && ForceShield == 0)
             {
