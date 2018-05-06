@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyIA : MonoBehaviour {
+public class EnemyIA2 : MonoBehaviour {
 
-    
     public GameObject EnemyShip;
     private bool Hit;
     private Transform Player;
@@ -17,41 +16,44 @@ public class EnemyIA : MonoBehaviour {
     private bool InsideArea;
 
 
-	// Use this for initialization
-	void Start () {
-         
-        
+    // Use this for initialization
+    void Start()
+    {
+
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         SpaceShipPosition = EnemyShip.transform.position;
-        
+
 
         if (!Hit)
         {
-            transform.position += new Vector3(0, 0, -0.6f);
+            transform.position += new Vector3(0, 0, -0.4f);
 
             if (transform.position.z <= -12)
             {
                 DestroyObject(this.gameObject);
             }
-        } else if (Hit)
+        }
+        else if (Hit)
         {
             DestroyObject(this.gameObject);
         }
 
-        ShootToPlayer();            
-            
-        
-	}
+        ShootToPlayer();
+
+
+    }
 
     void ShootToPlayer()
     {
         InsideCombatArea();
-        
-        if(InsideArea)
+
+        if (InsideArea)
         {
             ShotTimer -= Time.deltaTime;
             if (ShotTimer <= 0 && InsideArea)
@@ -61,20 +63,21 @@ public class EnemyIA : MonoBehaviour {
                 ShotTimer = 1.5f;
             }
         }
-            
+
     }
 
     bool InsideCombatArea()
     {
-        if(this.transform.position.z <= 53)
+        if (this.transform.position.z <= 53)
         {
             if (this.transform.position.z >= -7)
             {
                 InsideArea = true;
-                
+
             }
-            
-        } else 
+
+        }
+        else
         {
             InsideArea = false;
         }
@@ -82,5 +85,4 @@ public class EnemyIA : MonoBehaviour {
         return InsideArea;
 
     }
-        
 }

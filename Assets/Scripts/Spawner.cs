@@ -45,7 +45,7 @@ public class Spawner : MonoBehaviour {
 
         while (!stop)
         {
-            RandEnemy = Random.Range(0, 2);
+            RandEnemy = Random.Range(1, 4);
             Vector3 SpawnPosition = new Vector3(Random.Range(-18, 18),0, 60 );
             Instantiate(Enemies[RandEnemy], SpawnPosition , Quaternion.identity);
             EnemiesSpawned++;

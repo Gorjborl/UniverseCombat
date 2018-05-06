@@ -41,7 +41,15 @@ public class FireShot1 : MonoBehaviour {
             FindObjectOfType<BasicControls>().Score++;
             FindObjectOfType<PowerUp>().DropProb(DropPos);
         }
+
+        if (collision.gameObject.tag == "EnemyShip3")
+        {
+            DestroyObject(this.gameObject);
+            Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
+            FindObjectOfType<EnemyIA3>().UpdateEnemyLives();
+        }
         
+
     }
     
     
