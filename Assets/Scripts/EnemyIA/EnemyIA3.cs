@@ -181,6 +181,7 @@ public class EnemyIA3 : MonoBehaviour {
         if (collision.gameObject.tag == "Shoot")
         {
             UpdateEnemyLives();
+            FindObjectOfType<BasicControls>().PlayHitAudio();
         }
 
 
@@ -196,6 +197,7 @@ public class EnemyIA3 : MonoBehaviour {
         } else if (EnemyLives == 0)
         {
             DropPos = transform.position;
+            FindObjectOfType<BasicControls>().PlayExplosionAudio();
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             FindObjectOfType<BasicControls>().Score++;

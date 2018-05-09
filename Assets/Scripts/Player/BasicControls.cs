@@ -31,9 +31,15 @@ public class BasicControls : MonoBehaviour {
     private int multiplier;
 
     public GameObject ForceImprove;
+
+    public AudioClip Explosion;
+    public AudioClip Hit;
+    public AudioClip PowerUp;
+    private AudioSource SoundFile;
     // Use this for initialization
     void Start() {
 
+        SoundFile = GetComponent<AudioSource>();
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
         PlayerLives = 1;
         ForceShield = 3;
@@ -175,14 +181,20 @@ public class BasicControls : MonoBehaviour {
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
             Instantiate(Resources.Load("Explosion"), transform.position + new Vector3(0, 0, 6), Quaternion.identity);
             UpdateForceShieldStat();
+            PlayExplosionAudio();            
+        }
 
-
+        if (collision.gameObject.tag == "EnemyShip3")
+        {
+            FindObjectOfType<EnemyIA3>().UpdateEnemyLives();
+            PlayHitAudio();
         }
 
         if (collision.gameObject.tag == "ShieldUp")
         {
             UpgradeForceShield();
             Destroy(GameObject.FindGameObjectWithTag("ShieldUp"));
+            PlayPowerUpAudio();
         }
 
 
@@ -191,32 +203,25 @@ public class BasicControls : MonoBehaviour {
     void ShieldBarColor()
     {        
             if (ForceShield == 3)
-            {
-                //ShieldRadialBar.fillAmount = 1f;   
-                ShieldRadialBar.color = new Color32(66, 244, 122, 100);
-                
+            {                 
+                ShieldRadialBar.color = new Color32(66, 244, 122, 100);            
 
             }
 
             if (ForceShield == 2)
-            {                
-                //ShieldRadialBar.fillAmount = 0.67f ;                
+            {                 
                 ShieldRadialBar.color = new Color32(255, 242, 0, 100);
                 
             }
 
             if (ForceShield == 1)
-            {
-            
-                //ShieldRadialBar.fillAmount = 0.33f;                
+            {            
                 ShieldRadialBar.color = new Color32(237, 35, 35, 100);
                 
             }
 
             if (ForceShield == 0)
             {
-                //ShieldRadialBar.fillAmount = 0;
-                
             }
 
     }
@@ -337,8 +342,7 @@ public class BasicControls : MonoBehaviour {
             }
             
         }
-        Debug.Log(PlayerLives.ToString());
-        
+                
     }
 
     public void UpgradeForceShield()
@@ -416,5 +420,20 @@ public class BasicControls : MonoBehaviour {
             PlayerLives++;
             multiplier++;
         }
+    }
+
+    public void PlayHitAudio()
+    {
+        SoundFile.PlayOneShot(Hit);
+    }
+
+    public void PlayExplosionAudio()
+    {
+        SoundFile.PlayOneShot(Explosion);
+    }
+
+    public void PlayPowerUpAudio()
+    {
+        SoundFile.PlayOneShot(PowerUp);
     }
 }

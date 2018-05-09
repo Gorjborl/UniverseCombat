@@ -53,7 +53,7 @@ public class FireShot2 : MonoBehaviour {
         
         if (collision.gameObject.tag == "PlayerShip")
         {
-            
+            FindObjectOfType<BasicControls>().PlayHitAudio();
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             FindObjectOfType<BasicControls>().UpdateForceShieldStat();

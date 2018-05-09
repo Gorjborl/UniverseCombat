@@ -10,9 +10,11 @@ public class FireShot1 : MonoBehaviour {
     public int Score = 0;
 
     public Vector3 DropPos;
-	// Use this for initialization
-	void Start () {
 
+    
+    // Use this for initialization
+    void Start () {
+        
         fireball1 = this.GetComponent<GameObject>();
         
 	}
@@ -29,24 +31,27 @@ public class FireShot1 : MonoBehaviour {
         
 	}
 
+    
     private void OnCollisionEnter(Collision collision)
     {
         
         if (collision.gameObject.tag == "EnemyShip")
-        {            
+        {
+            FindObjectOfType<BasicControls>().PlayExplosionAudio();
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             DropPos = transform.position;
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
             FindObjectOfType<BasicControls>().Score++;
             FindObjectOfType<PowerUp>().DropProb(DropPos);
+            
         }
 
         if (collision.gameObject.tag == "EnemyShip3")
-        {
+        {            
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
-            //FindObjectOfType<EnemyIA3>().UpdateEnemyLives();
+            
         }
         
 
