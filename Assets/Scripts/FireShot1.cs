@@ -46,7 +46,7 @@ public class FireShot1 : MonoBehaviour {
         {
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
-            FindObjectOfType<EnemyIA3>().UpdateEnemyLives();
+            //FindObjectOfType<EnemyIA3>().UpdateEnemyLives();
         }
         
 

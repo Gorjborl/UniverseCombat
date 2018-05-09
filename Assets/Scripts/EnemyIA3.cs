@@ -9,6 +9,8 @@ public class EnemyIA3 : MonoBehaviour {
     private Transform Player;
 
     private float ShotTimer = 0.001f;
+    private float SubShotTimer = 0.001f;
+    private int ShotCounter = 1;
     private Vector3 SpaceShipPosition;
     private Vector3 ShootPosition;
     private float Distance;
@@ -34,23 +36,23 @@ public class EnemyIA3 : MonoBehaviour {
     {
         InsideCombatArea();
         SpaceShipPosition = EnemyShip.transform.position;
-                
+
         if (!InsideArea)
         {
             transform.position += new Vector3(0, 0, -0.2f);
         } else if (InsideArea)
         {
-           
+
             EnemyShipMove();
         }
-            
 
-            if (transform.position.z <= -12)
-            {
-                DestroyObject(this.gameObject);
-            }
 
-        
+        if (transform.position.z <= -12)
+        {
+            DestroyObject(this.gameObject);
+        }
+
+
         ShootToPlayer();
 
 
@@ -58,22 +60,43 @@ public class EnemyIA3 : MonoBehaviour {
 
     void EnemyShipMove()
     {
+
         MovementTimer -= Time.deltaTime;
         if (MovementTimer <= 0)
         {
-            MovementDirection = EnemyShipDirection();            
+            MovementDirection = EnemyShipDirection();
             MovementTimer = 0.5f;
         }
         if (InsideArea)
         {
             this.transform.position += MovementDirection;
-        } else if(!InsideArea)
+
+            if (this.transform.position.x <= -15)
+            {
+                this.transform.position += new Vector3(0.2f, 0, 0);
+                MovementTimer = 0.5f;
+            }
+
+            if (this.transform.position.x >= 15)
+            {
+                this.transform.position += new Vector3(-0.2f, 0, 0);
+                MovementTimer = 0.5f;
+            }
+
+            if (this.transform.position.z <= -7)
+            {
+
+            }
+
+
+
+        } else if (!InsideArea)
         {
             MovementTimer = 0;
         }
-        
-               
-        
+
+
+
     }
 
     Vector3 EnemyShipDirection()
@@ -101,20 +124,27 @@ public class EnemyIA3 : MonoBehaviour {
 
     }
 
-    
+
 
     void ShootToPlayer()
     {
-        
+
 
         if (InsideArea)
         {
             ShotTimer -= Time.deltaTime;
+            SubShotTimer -= Time.deltaTime;
             if (ShotTimer <= 0 && InsideArea)
             {
-                ShootPosition = SpaceShipPosition + new Vector3(0.1f, 0, -9.5f);
-                Instantiate(Resources.Load("FireBall2"), ShootPosition, Quaternion.identity);
+                if(SubShotTimer <= 0 && InsideArea && ShotCounter <= 3)
+                {
+                    ShootPosition = SpaceShipPosition + new Vector3(0.1f, 0, -9.5f);
+                    Instantiate(Resources.Load("FireBall2"), ShootPosition, Quaternion.identity);
+                    SubShotTimer = 0.5f;
+                    ShotCounter++;
+                }
                 ShotTimer = 1.5f;
+                ShotCounter = 0;
             }
         }
 
@@ -126,7 +156,13 @@ public class EnemyIA3 : MonoBehaviour {
         {
             if (this.transform.position.z >= -7)
             {
-                InsideArea = true;
+                if (this.transform.position.x >= -19)
+                {
+                    if (this.transform.position.x <= 19)
+                    {
+                        InsideArea = true;
+                    }
+                }
 
             }
 
@@ -140,30 +176,33 @@ public class EnemyIA3 : MonoBehaviour {
 
     }
 
-    /*private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Shoot")
         {
-            DestroyObject(FindObjectOfType<FireShot1>().gameObject);
-            Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             UpdateEnemyLives();
-
         }
-    }*/
+
+
+    }
 
     public void UpdateEnemyLives()
     {
         if (EnemyLives != 0)
         {
             EnemyLives--;
-            
-            
+
+
         } else if (EnemyLives == 0)
         {
             DropPos = transform.position;
             DestroyObject(this.gameObject);
+            Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             FindObjectOfType<BasicControls>().Score++;
             FindObjectOfType<PowerUp>().DropProb(DropPos);
         }
     }
+
+    
+
 }

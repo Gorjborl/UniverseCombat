@@ -28,6 +28,7 @@ public class BasicControls : MonoBehaviour {
     public Text ScoreText;
     public int Score;
     public Text Lives;
+    private int multiplier;
 
     public GameObject ForceImprove;
     // Use this for initialization
@@ -36,6 +37,7 @@ public class BasicControls : MonoBehaviour {
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
         PlayerLives = 1;
         ForceShield = 3;
+        multiplier = 1;
         Lives.text = PlayerLives.ToString();
         ScoreText.text = Score.ToString();
 
@@ -53,6 +55,7 @@ public class BasicControls : MonoBehaviour {
         ShieldBarIncrease();
         ScoreText.text = Score.ToString();
         Lives.text = PlayerLives.ToString();
+        UpdateLives();
 
 
 
@@ -405,5 +408,13 @@ public class BasicControls : MonoBehaviour {
     }
 
 
-
+    void UpdateLives()
+    {
+        
+        if (Score == multiplier * 500)
+        {
+            PlayerLives++;
+            multiplier++;
+        }
+    }
 }
