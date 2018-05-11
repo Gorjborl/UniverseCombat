@@ -26,17 +26,17 @@ public class PowerUp : MonoBehaviour {
     {
         int Result = Random.Range(1, 100);
         
-        if (Result <= 5)
+        if (Result <= 3)
         {
             Instantiate(ForceShieldImprove, DropPos, Quaternion.identity);
         }
 
-        if (Result <= 10 && Result >5)
+        if (Result <= 7 && Result > 3)
         {
             Instantiate(GoldForceShield, DropPos, Quaternion.identity);
         }
 
-        if (Result >= 11 && Result <= 15)
+        if (Result > 7 && Result <= 10)
         {
             Instantiate(LiveUp, DropPos, Quaternion.identity);
         }

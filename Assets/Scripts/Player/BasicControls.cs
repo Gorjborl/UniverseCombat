@@ -39,9 +39,20 @@ public class BasicControls : MonoBehaviour {
     public AudioClip Hit;
     public AudioClip PowerUp;
     private AudioSource SoundFile;
+
+    public Canvas Pause_Canvas;
+    public Canvas Hud_Canvas;
+    public Button PauseBtn;
+    private bool PauseBtnClick;
+    public Button ResumeButton;
+    private bool ResumeClick;
+    public bool IsPaused;
+    static bool IsPausedinit = false;
     // Use this for initialization
     void Start() {
 
+        IsPaused = IsPausedinit;
+        Time.timeScale = 1;
         SoundFile = GetComponent<AudioSource>();
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
         PlayerLives = 1;
@@ -66,7 +77,13 @@ public class BasicControls : MonoBehaviour {
         Lives.text = PlayerLives.ToString();
         UpdateLives();
         GoldForceShield(GoldShieldTimer);
-        
+
+        ResumeClick = false;
+        ResumeButton.onClick.AddListener(ClickResume);
+
+        //PauseBtnClick = false;
+        //PauseBtn.onClick.AddListener(ClickPause);
+
 
 
 
@@ -105,6 +122,23 @@ public class BasicControls : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Z))
         {
             FireShoot1();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) || ResumeClick /*|| PauseBtnClick*/)
+        {
+            if (Time.timeScale == 1)
+            {
+                PauseGame();
+                Pause_Canvas.gameObject.SetActive(true);
+                Hud_Canvas.gameObject.SetActive(false);
+
+            }
+            else
+            {
+                ResumeGame();
+                Pause_Canvas.gameObject.SetActive(false);
+                Hud_Canvas.gameObject.SetActive(true);
+            }
         }
 
         /*if (Input.GetKeyDown(KeyCode.X))
@@ -476,4 +510,28 @@ public class BasicControls : MonoBehaviour {
     {
         SoundFile.PlayOneShot(PowerUp);
     }
+
+    void PauseGame()
+    {
+        Time.timeScale = 0;
+        IsPaused = true;
+    }
+
+    void ResumeGame()
+    {
+        Time.timeScale = 1;
+        IsPaused = false;
+    }
+
+    void ClickPause()
+    {
+        PauseBtnClick = true;
+    }
+
+
+    void ClickResume()
+    {
+        ResumeClick = true;
+    }
+
 }

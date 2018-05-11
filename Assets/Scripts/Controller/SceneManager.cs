@@ -14,6 +14,11 @@ public class SceneManager : MonoBehaviour {
     {
        
     }
-	
-    
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+
 }
