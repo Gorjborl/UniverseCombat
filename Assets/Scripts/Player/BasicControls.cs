@@ -18,13 +18,16 @@ public class BasicControls : MonoBehaviour {
     private GameObject ShootFire1;
     private int HorizontalSpeed = 35;
     private Vector3 SpaceShipPosition;
+    private float GoldShieldTimer;
+    private bool GoldForceActivated;
 
     private int PlayerLives;
     public int ForceShield;
     public GameObject ShieldGreen;
     public GameObject ShieldYellow;
     public GameObject ShieldRed;
-
+    public GameObject ShieldGold;
+    
     public Text ScoreText;
     public int Score;
     public Text Lives;
@@ -62,6 +65,10 @@ public class BasicControls : MonoBehaviour {
         ScoreText.text = Score.ToString();
         Lives.text = PlayerLives.ToString();
         UpdateLives();
+        GoldForceShield(GoldShieldTimer);
+        
+
+
 
 
 
@@ -183,17 +190,25 @@ public class BasicControls : MonoBehaviour {
             UpdateForceShieldStat();
             PlayExplosionAudio();            
         }
-
-        if (collision.gameObject.tag == "EnemyShip3")
-        {
-            FindObjectOfType<EnemyIA3>().UpdateEnemyLives();
-            PlayHitAudio();
-        }
-
+        
         if (collision.gameObject.tag == "ShieldUp")
         {
             UpgradeForceShield();
             Destroy(GameObject.FindGameObjectWithTag("ShieldUp"));
+            PlayPowerUpAudio();
+        }
+
+        if (collision.gameObject.tag == "GoldShield")
+        {
+            GoldShieldTimer = 5f;
+            Destroy(GameObject.FindGameObjectWithTag("GoldShield"));
+            PlayPowerUpAudio();
+        }
+
+        if (collision.gameObject.tag == "LiveUp")
+        {
+            PlayerLives++;
+            Destroy(GameObject.FindGameObjectWithTag("LiveUp"));
             PlayPowerUpAudio();
         }
 
@@ -319,7 +334,7 @@ public class BasicControls : MonoBehaviour {
     public void UpdateForceShieldStat()
     {
         
-        if (ForceShield != 0)
+        if (ForceShield != 0 && !GoldForceActivated)
         {
             ForceShield--;
             PlayerHit = true;
@@ -327,7 +342,7 @@ public class BasicControls : MonoBehaviour {
             
 
         }
-        else if (ForceShield == 0)
+        else if (ForceShield == 0 && !GoldForceActivated)
         {
             if (PlayerLives != 0 && ForceShield == 0)
             {
@@ -358,6 +373,30 @@ public class BasicControls : MonoBehaviour {
         }
 
     }
+
+    void GoldForceShield(float Timer)
+    {
+        
+        GoldShieldTimer -= Time.deltaTime;
+        if (GoldShieldTimer >= 0)
+        {
+            GoldForceActivated = true;
+            ShieldGold.SetActive(true);
+            ShieldGreen.SetActive(false);
+            ShieldYellow.SetActive(false);
+            ShieldRed.SetActive(false);
+            ShieldRadialBar.color = new Color32(255, 215, 0, 100);
+            ShieldRadialBar.fillAmount = 1f;
+
+        } else if (GoldShieldTimer < 0)
+        {
+            
+            ShieldGold.SetActive(false);
+            GoldForceActivated = false;
+        }
+        
+    }
+        
     void GameOver()
     {
         Application.LoadLevel("GameOver");
@@ -415,11 +454,12 @@ public class BasicControls : MonoBehaviour {
     void UpdateLives()
     {
         
-        if (Score == multiplier * 500)
+        if (Score == multiplier * 100)
         {
             PlayerLives++;
             multiplier++;
         }
+                
     }
 
     public void PlayHitAudio()

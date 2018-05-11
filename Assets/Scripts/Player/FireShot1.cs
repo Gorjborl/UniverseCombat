@@ -47,6 +47,13 @@ public class FireShot1 : MonoBehaviour {
             
         }
 
+        if (collision.gameObject.tag == "EnemyShip2")
+        {
+            DestroyObject(this.gameObject);
+            Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
+
+        }
+
         if (collision.gameObject.tag == "EnemyShip3")
         {            
             DestroyObject(this.gameObject);

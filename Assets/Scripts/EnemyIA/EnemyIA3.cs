@@ -184,6 +184,16 @@ public class EnemyIA3 : MonoBehaviour {
             FindObjectOfType<BasicControls>().PlayHitAudio();
         }
 
+        if (collision.gameObject.tag == "PlayerShip")
+        {
+
+            FindObjectOfType<BasicControls>().UpdateForceShieldStat();
+            FindObjectOfType<BasicControls>().UpdateForceShieldStat();
+            FindObjectOfType<BasicControls>().UpdateForceShieldStat();
+            FindObjectOfType<BasicControls>().PlayHitAudio();
+            Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
 
     }
 

@@ -5,7 +5,8 @@ using UnityEngine;
 public class PowerUp : MonoBehaviour {
 
     public GameObject ForceShieldImprove;
-    
+    public GameObject GoldForceShield;
+    public GameObject LiveUp;
 	// Use this for initialization
 	void Start () {
 		
@@ -24,11 +25,20 @@ public class PowerUp : MonoBehaviour {
     public void DropProb(Vector3 DropPos)
     {
         int Result = Random.Range(1, 100);
-        Debug.Log(Result.ToString());
+        
         if (Result <= 5)
         {
             Instantiate(ForceShieldImprove, DropPos, Quaternion.identity);
         }
 
+        if (Result <= 10 && Result >5)
+        {
+            Instantiate(GoldForceShield, DropPos, Quaternion.identity);
+        }
+
+        if (Result >= 11 && Result <= 15)
+        {
+            Instantiate(LiveUp, DropPos, Quaternion.identity);
+        }
     }
 }

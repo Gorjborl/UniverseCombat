@@ -18,7 +18,7 @@ public class ScenarioController : MonoBehaviour {
     {                
         CurrentPlanet.transform.position += new Vector3(0, 0, -0.1f);
 
-        if(CurrentPlanet.transform.position.z <= -50)
+        if(CurrentPlanet.transform.position.z <= -70)
         {
             Destroy(CurrentPlanet.gameObject);
             PlanetInstantiate();
@@ -28,7 +28,7 @@ public class ScenarioController : MonoBehaviour {
         
     void PlanetInstantiate()
     {
-        RandPlanet = Random.Range(0, 5);
+        RandPlanet = Random.Range(0, 6);
         SpawnPosition = new Vector3(Random.Range(-45, 45), -50f, 130);
         CurrentPlanet = Instantiate(Planets[RandPlanet],SpawnPosition,Quaternion.identity);
     }

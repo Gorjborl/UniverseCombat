@@ -11,6 +11,9 @@ TagManager:
   - PowerUp
   - ShieldUp
   - EnemyShip3
+  - EnemyShip2
+  - GoldShield
+  - LiveUp
   layers:
   - Default
   - TransparentFX
