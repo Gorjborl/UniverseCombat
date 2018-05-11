@@ -48,6 +48,11 @@ public class BasicControls : MonoBehaviour {
     private bool ResumeClick;
     public bool IsPaused;
     static bool IsPausedinit = false;
+
+    // Touch Variables
+    public float sensivity = 0.035f;
+    private float ShotTimer = 0.001f;
+    Vector3 ShootPosition;
     // Use this for initialization
     void Start() {
 
@@ -81,8 +86,8 @@ public class BasicControls : MonoBehaviour {
         ResumeClick = false;
         ResumeButton.onClick.AddListener(ClickResume);
 
-        //PauseBtnClick = false;
-        //PauseBtn.onClick.AddListener(ClickPause);
+        PauseBtnClick = false;
+        PauseBtn.onClick.AddListener(ClickPause);
 
 
 
@@ -93,30 +98,51 @@ public class BasicControls : MonoBehaviour {
 
     void UserInput()
     {
+#if UNITY_IOS || UNITY_ANDROID
 
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            // Get movement of the finger since last frame
+            Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+
+            // Move object across XY plane
+            transform.Translate(touchDeltaPosition.x * sensivity,0, touchDeltaPosition.y * sensivity);
+            CheckValidPosition();
+        }
+
+        if (ResumeClick || PauseBtnClick)
+            {
+                GoToPause();
+            }
+        
+
+        ShotTimer -= Time.deltaTime;
+        if (ShotTimer <= 0)
+        {
+            FireShoot1();
+            ShotTimer = 0.5f;
+        }
+
+#else
         //Keyboard Input for Test Purposes
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.position += new Vector3(-1 * Time.deltaTime * HorizontalSpeed, 0, 0);
-            CheckValidPosition();
+            MoveLeft();
         }
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(1 * Time.deltaTime * HorizontalSpeed, 0, 0);
-            CheckValidPosition();
+            MoveRight();
         }
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            transform.position += new Vector3(0, 0, 1 * Time.deltaTime * HorizontalSpeed);
-            CheckValidPosition();
+            MoveUp();
         }
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            transform.position += new Vector3(0, 0, -1 * Time.deltaTime * HorizontalSpeed);
-            CheckValidPosition();
+            MoveDown();
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -124,21 +150,9 @@ public class BasicControls : MonoBehaviour {
             FireShoot1();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) || ResumeClick /*|| PauseBtnClick*/)
+        if (Input.GetKeyDown(KeyCode.Escape) || ResumeClick || PauseBtnClick)
         {
-            if (Time.timeScale == 1)
-            {
-                PauseGame();
-                Pause_Canvas.gameObject.SetActive(true);
-                Hud_Canvas.gameObject.SetActive(false);
-
-            }
-            else
-            {
-                ResumeGame();
-                Pause_Canvas.gameObject.SetActive(false);
-                Hud_Canvas.gameObject.SetActive(true);
-            }
+            GoToPause();
         }
 
         /*if (Input.GetKeyDown(KeyCode.X))
@@ -150,8 +164,33 @@ public class BasicControls : MonoBehaviour {
         {
             DoublePlasma();
         }*/
-
+#endif
     }
+
+    void MoveLeft()
+    {
+        transform.position += new Vector3(-1 * Time.deltaTime * HorizontalSpeed, 0, 0);
+        CheckValidPosition();
+    }
+
+    void MoveRight()
+    {
+        transform.position += new Vector3(1 * Time.deltaTime * HorizontalSpeed, 0, 0);
+        CheckValidPosition();
+    }
+
+    void MoveUp()
+    {
+        transform.position += new Vector3(0, 0, 1 * Time.deltaTime * HorizontalSpeed);
+        CheckValidPosition();
+    }
+
+    void MoveDown()
+    {
+        transform.position += new Vector3(0, 0, -1 * Time.deltaTime * HorizontalSpeed);
+        CheckValidPosition();
+    }
+
 
 
     void CheckValidPosition()
@@ -534,4 +573,20 @@ public class BasicControls : MonoBehaviour {
         ResumeClick = true;
     }
 
+    void GoToPause()
+    {
+        if (Time.timeScale == 1)
+        {
+            PauseGame();
+            Pause_Canvas.gameObject.SetActive(true);
+            Hud_Canvas.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            ResumeGame();
+            Pause_Canvas.gameObject.SetActive(false);
+            Hud_Canvas.gameObject.SetActive(true);
+        }
+    }
 }
