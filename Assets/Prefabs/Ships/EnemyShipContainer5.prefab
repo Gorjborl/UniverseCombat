@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyShip: {fileID: 1599910411044766}
+  FireShot: {fileID: 1715830633165600, guid: 49f426d622120b84c9c1bc8fae873382, type: 2}
   DropPos: {x: 0, y: 0, z: 0}
   EnemyLives: 3
   MovementTimer: 2

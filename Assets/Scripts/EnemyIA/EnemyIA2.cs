@@ -78,7 +78,7 @@ public class EnemyIA2 : MonoBehaviour
                 Shot1 = (GameObject)Instantiate(FireShot, ShootPosition, Quaternion.identity);
                 ShootPosition = SpaceShipPosition + new Vector3(2f, 0, -9.5f);
                 Shot2 = (GameObject)Instantiate(FireShot, ShootPosition, Quaternion.identity);
-                ShotTimer = 1.5f;
+                ShotTimer = 1.2f;
                 
             }
         }
@@ -124,6 +124,7 @@ public class EnemyIA2 : MonoBehaviour
             FindObjectOfType<BasicControls>().UpdateForceShieldStat();
             FindObjectOfType<BasicControls>().UpdateForceShieldStat();
             FindObjectOfType<BasicControls>().PlayHitAudio();
+            FindObjectOfType<BasicControls>().Score+=2;
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
@@ -145,7 +146,7 @@ public class EnemyIA2 : MonoBehaviour
             FindObjectOfType<BasicControls>().PlayExplosionAudio();
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
-            FindObjectOfType<BasicControls>().Score++;
+            FindObjectOfType<BasicControls>().Score += 2;
             FindObjectOfType<PowerUp>().DropProb(DropPos);
         }
     }

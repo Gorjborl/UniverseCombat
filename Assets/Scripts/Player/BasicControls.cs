@@ -32,6 +32,8 @@ public class BasicControls : MonoBehaviour {
     public int Score;
     public Text Lives;
     private int multiplier;
+    public int Level;
+    private int LevelMultiplier;
 
     public GameObject ForceImprove;
 
@@ -44,32 +46,63 @@ public class BasicControls : MonoBehaviour {
     public Canvas Hud_Canvas;
     public Button PauseBtn;
     private bool PauseBtnClick;
+    public GameObject MusicContainer;
+    private AudioSource Music;
     public Button ResumeButton;
     private bool ResumeClick;
+    public Button OptionButton;
+    private bool OptionClick;
     public bool IsPaused;
     static bool IsPausedinit = false;
+
+    public Canvas Option_Canvas;
+    public Slider SensibilitySlider;
+
+    public Button ResumeButton2;
+    
 
     // Touch Variables
     public float sensivity = 0.035f;
     private float ShotTimer = 0.001f;
     Vector3 ShootPosition;
+
+    private int CurrentScore = 0;
+    private int startingHighScore;
+    private int startingHighScore2;
+    private int startingHighScore3;
+    private int startingHighScore4;
+    private int startingHighScore5;
+
     // Use this for initialization
     void Start() {
-
+        
+        SensibilitySlider.value = PlayerPrefs.GetFloat("Sensivity");
         IsPaused = IsPausedinit;
         Time.timeScale = 1;
         SoundFile = GetComponent<AudioSource>();
+        Music = MusicContainer.GetComponent<AudioSource>();
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
         PlayerLives = 1;
         ForceShield = 3;
         multiplier = 1;
+        LevelMultiplier = 1;
+        Level = 1;
         Lives.text = PlayerLives.ToString();
         ScoreText.text = Score.ToString();
+
+        startingHighScore = PlayerPrefs.GetInt("HighScore");
+        startingHighScore2 = PlayerPrefs.GetInt("HighScore2");
+        startingHighScore3 = PlayerPrefs.GetInt("HighScore3");
+        startingHighScore4 = PlayerPrefs.GetInt("HighScore4");
+        startingHighScore5 = PlayerPrefs.GetInt("HighScore5");
+
 
     }
 
     // Update is called once per frame
     void Update() {
+
+        PlayerPrefs.SetFloat("Sensivity", sensivity);
 
         UserInput();
         SpaceShipPosition = Ship.transform.position;
@@ -82,12 +115,20 @@ public class BasicControls : MonoBehaviour {
         Lives.text = PlayerLives.ToString();
         UpdateLives();
         GoldForceShield(GoldShieldTimer);
+        UpdateHighScore();
+        UpdateLevel();
+        AdjustSensibility();
 
         ResumeClick = false;
         ResumeButton.onClick.AddListener(ClickResume);
+        
+        ResumeButton2.onClick.AddListener(ClickResume);
 
         PauseBtnClick = false;
         PauseBtn.onClick.AddListener(ClickPause);
+
+        OptionClick = false;
+        OptionButton.onClick.AddListener(ClickOption);
 
 
 
@@ -114,6 +155,11 @@ public class BasicControls : MonoBehaviour {
             {
                 GoToPause();
             }
+
+        if (OptionClick)
+        {
+            GoToOptions();
+        }
         
 
         ShotTimer -= Time.deltaTime;
@@ -153,6 +199,11 @@ public class BasicControls : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Escape) || ResumeClick || PauseBtnClick)
         {
             GoToPause();
+        }
+
+        if (OptionClick)
+        {
+            GoToOptions();
         }
 
         /*if (Input.GetKeyDown(KeyCode.X))
@@ -259,6 +310,7 @@ public class BasicControls : MonoBehaviour {
         if (collision.gameObject.tag == "EnemyShip")
         {
             DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
+            Score += 1;
             Instantiate(Resources.Load("Explosion"), transform.position + new Vector3(0, 0, 6), Quaternion.identity);
             UpdateForceShieldStat();
             PlayExplosionAudio();            
@@ -470,11 +522,6 @@ public class BasicControls : MonoBehaviour {
         
     }
         
-    void GameOver()
-    {
-        Application.LoadLevel("GameOver");
-    }
-
     public void ShieldBarColorFill()
     {
         if (ForceShield == 3)
@@ -535,6 +582,19 @@ public class BasicControls : MonoBehaviour {
                 
     }
 
+    void UpdateLevel()
+    {
+        int LevelComparator = LevelMultiplier * 10 + (10 * Level * Level - 1);
+        if (Score >= LevelComparator)
+        {
+            Level++;
+            LevelMultiplier++;
+            FindObjectOfType<Spawner>().SpawnLeastWait -= Level * 0.1f;
+            FindObjectOfType<Spawner>().SpawnMostWait -= Level * 0.1f;
+        }
+        
+    }
+
     public void PlayHitAudio()
     {
         SoundFile.PlayOneShot(Hit);
@@ -554,12 +614,14 @@ public class BasicControls : MonoBehaviour {
     {
         Time.timeScale = 0;
         IsPaused = true;
+        Music.Pause();
     }
 
     void ResumeGame()
     {
         Time.timeScale = 1;
         IsPaused = false;
+        Music.Play();
     }
 
     void ClickPause()
@@ -571,6 +633,11 @@ public class BasicControls : MonoBehaviour {
     void ClickResume()
     {
         ResumeClick = true;
+    }
+
+    void ClickOption()
+    {
+        OptionClick = true;
     }
 
     void GoToPause()
@@ -587,6 +654,65 @@ public class BasicControls : MonoBehaviour {
             ResumeGame();
             Pause_Canvas.gameObject.SetActive(false);
             Hud_Canvas.gameObject.SetActive(true);
+            Option_Canvas.gameObject.SetActive(false);
         }
+    }
+
+    void GoToOptions()
+    {
+        
+            Pause_Canvas.gameObject.SetActive(false);
+            Hud_Canvas.gameObject.SetActive(false);
+            Option_Canvas.gameObject.SetActive(true);       
+        
+    }
+
+    void AdjustSensibility()
+    {
+        sensivity = SensibilitySlider.value;
+    }
+
+
+    public void UpdateHighScore()
+    {
+        CurrentScore = Score;
+
+        if (CurrentScore > startingHighScore)
+        {
+            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
+            PlayerPrefs.SetInt("HighScore4", startingHighScore3);
+            PlayerPrefs.SetInt("HighScore3", startingHighScore2);
+            PlayerPrefs.SetInt("HighScore2", startingHighScore);
+            PlayerPrefs.SetInt("HighScore", CurrentScore);
+        }
+        else if (CurrentScore > startingHighScore2)
+        {
+            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
+            PlayerPrefs.SetInt("HighScore4", startingHighScore3);
+            PlayerPrefs.SetInt("HighScore3", startingHighScore2);
+            PlayerPrefs.SetInt("HighScore2", CurrentScore);
+        }
+        else if (CurrentScore > startingHighScore3)
+        {
+            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
+            PlayerPrefs.SetInt("HighScore4", startingHighScore3);
+            PlayerPrefs.SetInt("HighScore3", CurrentScore);
+        }
+        else if (CurrentScore > startingHighScore4)
+        {
+            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
+            PlayerPrefs.SetInt("HighScore4", CurrentScore);
+        }
+        else if (CurrentScore > startingHighScore5)
+        {
+            PlayerPrefs.SetInt("HighScore5", CurrentScore);
+        }
+        
+    }
+
+    void GameOver()
+    {
+        PlayerPrefs.SetInt("LastScore", CurrentScore);
+        Application.LoadLevel("GameOver");
     }
 }

@@ -12,7 +12,7 @@ public class Spawner : MonoBehaviour {
     public int StartWait;
     public bool stop;
     public int EnemiesSpawned = 0;
-    public int MaxEnemies;
+    
 
     int RandEnemy;
 
@@ -27,17 +27,10 @@ public class Spawner : MonoBehaviour {
 	void Update () {
 
         SpawnWait = Random.Range(SpawnLeastWait, SpawnMostWait);
-
-        if(EnemiesSpawned == MaxEnemies)
-        {
-            stop = true;
-        }
-        else
-        {
-            stop = false;
-        }
         
-	}
+
+
+    }
 
     IEnumerator WaitSpawner()
     {

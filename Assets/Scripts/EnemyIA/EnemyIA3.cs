@@ -5,6 +5,10 @@ using UnityEngine;
 public class EnemyIA3 : MonoBehaviour {
 
     public GameObject EnemyShip;
+    public GameObject FireShot;
+    private GameObject Shot1;
+    private GameObject Shot2;
+    private GameObject Shot3;
     private bool Hit;
     private Transform Player;
 
@@ -27,6 +31,9 @@ public class EnemyIA3 : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        Shot1 = FireShot;
+        Shot2 = FireShot;
+        Shot3 = FireShot;
         EnemyLives = 2;
 
     }
@@ -136,16 +143,11 @@ public class EnemyIA3 : MonoBehaviour {
             SubShotTimer -= Time.deltaTime;
             if (ShotTimer <= 0 && InsideArea)
             {
-                if(SubShotTimer <= 0 && InsideArea && ShotCounter <= 3)
-                {
                     ShootPosition = SpaceShipPosition + new Vector3(0.1f, 0, -9.5f);
-                    Instantiate(Resources.Load("FireBall2"), ShootPosition, Quaternion.identity);
-                    SubShotTimer = 0.5f;
-                    ShotCounter++;
-                }
-                ShotTimer = 1.5f;
-                ShotCounter = 0;
-            }
+                    Shot1 = (GameObject)Instantiate(Resources.Load("FireBall2"), ShootPosition, Quaternion.identity);
+                    ShotTimer = 1.1f;
+            } 
+            
         }
 
     }
@@ -191,6 +193,7 @@ public class EnemyIA3 : MonoBehaviour {
             FindObjectOfType<BasicControls>().UpdateForceShieldStat();
             FindObjectOfType<BasicControls>().UpdateForceShieldStat();
             FindObjectOfType<BasicControls>().PlayHitAudio();
+            FindObjectOfType<BasicControls>().Score += 3;
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
@@ -210,7 +213,7 @@ public class EnemyIA3 : MonoBehaviour {
             FindObjectOfType<BasicControls>().PlayExplosionAudio();
             DestroyObject(this.gameObject);
             Instantiate(Resources.Load("Explosion"), transform.position, Quaternion.identity);
-            FindObjectOfType<BasicControls>().Score++;
+            FindObjectOfType<BasicControls>().Score += 3;
             FindObjectOfType<PowerUp>().DropProb(DropPos);
         }
     }
