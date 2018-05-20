@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpRotate : MonoBehaviour {
+public class PowerUpGoldenShield : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +18,15 @@ public class PowerUpRotate : MonoBehaviour {
         {
             Destroy(this.gameObject);
         }
+    }
 
-	}
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "PlayerShip")
+        {
+            FindObjectOfType<BasicControls>().GoldShieldTimer = 5f;
+            Destroy(this.gameObject);
+            FindObjectOfType<BasicControls>().PlayPowerUpAudio();
+        }
+    }
 }

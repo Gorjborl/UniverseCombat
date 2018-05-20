@@ -41,26 +41,31 @@ public class EnemyIA2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InsideCombatArea();
-        SpaceShipPosition = EnemyShip.transform.position;
+        if (!FindObjectOfType<BasicControls>().IsPaused)
+        {
+            InsideCombatArea();
+            SpaceShipPosition = EnemyShip.transform.position;
 
-        if (!InsideArea)
-        {
-            transform.position += new Vector3(0, 0, -0.2f);
-        } else if (InsideArea)
-        {
-            transform.position += new Vector3(0, 0, -0.2f);
+            if (!InsideArea)
+            {
+                transform.position += new Vector3(0, 0, -0.2f);
+            }
+            else if (InsideArea)
+            {
+                transform.position += new Vector3(0, 0, -0.2f);
+            }
+
+
+
+            if (transform.position.z <= -12)
+            {
+                DestroyObject(this.gameObject);
+            }
+
+
+            ShootToPlayer();
         }
         
-        
-        
-        if (transform.position.z <= -12)
-        {
-            DestroyObject(this.gameObject);
-        }
-
-
-        ShootToPlayer();
 
     }
 
@@ -78,7 +83,7 @@ public class EnemyIA2 : MonoBehaviour
                 Shot1 = (GameObject)Instantiate(FireShot, ShootPosition, Quaternion.identity);
                 ShootPosition = SpaceShipPosition + new Vector3(2f, 0, -9.5f);
                 Shot2 = (GameObject)Instantiate(FireShot, ShootPosition, Quaternion.identity);
-                ShotTimer = 1.2f;
+                ShotTimer = 1.5f;
                 
             }
         }

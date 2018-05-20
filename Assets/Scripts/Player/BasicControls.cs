@@ -18,10 +18,10 @@ public class BasicControls : MonoBehaviour {
     private GameObject ShootFire1;
     private int HorizontalSpeed = 35;
     private Vector3 SpaceShipPosition;
-    private float GoldShieldTimer;
+    public float GoldShieldTimer;
     private bool GoldForceActivated;
 
-    private int PlayerLives;
+    public int PlayerLives;
     public int ForceShield;
     public GameObject ShieldGreen;
     public GameObject ShieldYellow;
@@ -36,6 +36,7 @@ public class BasicControls : MonoBehaviour {
     private int LevelMultiplier;
 
     public GameObject ForceImprove;
+    public bool UpgradeShot;
 
     public AudioClip Explosion;
     public AudioClip Hit;
@@ -55,7 +56,7 @@ public class BasicControls : MonoBehaviour {
     public bool IsPaused;
     static bool IsPausedinit = false;
 
-    public Canvas Option_Canvas;
+    public Canvas Option_Canvas;    
     public Slider SensibilitySlider;
 
     public Button ResumeButton2;
@@ -63,7 +64,8 @@ public class BasicControls : MonoBehaviour {
 
     // Touch Variables
     public float sensivity = 0.035f;
-    private float ShotTimer = 0.001f;
+    public float ShotTimer = 0;
+    public float NormalShotTimer = 0.5f;
     Vector3 ShootPosition;
 
     private int CurrentScore = 0;
@@ -82,6 +84,7 @@ public class BasicControls : MonoBehaviour {
         SoundFile = GetComponent<AudioSource>();
         Music = MusicContainer.GetComponent<AudioSource>();
         Rigidbody PlayerShipbody = this.GetComponent<Rigidbody>();
+        
         PlayerLives = 1;
         ForceShield = 3;
         multiplier = 1;
@@ -131,7 +134,7 @@ public class BasicControls : MonoBehaviour {
         OptionButton.onClick.AddListener(ClickOption);
 
 
-
+        Debug.Log(UpgradeShot);
 
 
 
@@ -139,36 +142,41 @@ public class BasicControls : MonoBehaviour {
 
     void UserInput()
     {
+
 #if UNITY_IOS || UNITY_ANDROID
-
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
-        {
-            // Get movement of the finger since last frame
-            Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-
-            // Move object across XY plane
-            transform.Translate(touchDeltaPosition.x * sensivity,0, touchDeltaPosition.y * sensivity);
-            CheckValidPosition();
-        }
-
         if (ResumeClick || PauseBtnClick)
-            {
-                GoToPause();
-            }
+        {
+            GoToPause();
+        }
 
         if (OptionClick)
         {
             GoToOptions();
         }
-        
 
-        ShotTimer -= Time.deltaTime;
-        if (ShotTimer <= 0)
+        if (!IsPaused)
         {
-            FireShoot1();
-            ShotTimer = 0.5f;
-        }
 
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                // Get movement of the finger since last frame
+                Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+
+                // Move object across XY plane
+                transform.Translate(touchDeltaPosition.x * sensivity, 0, touchDeltaPosition.y * sensivity);
+                CheckValidPosition();
+            }
+
+            
+
+
+            ShotTimer -= Time.deltaTime;
+            if (ShotTimer <= 0)
+            {
+                CurrentPlayerShot();
+                ShotTimer = NormalShotTimer;
+            }
+        }
 #else
         //Keyboard Input for Test Purposes
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -206,16 +214,17 @@ public class BasicControls : MonoBehaviour {
             GoToOptions();
         }
 
-        /*if (Input.GetKeyDown(KeyCode.X))
-        {
-            FirePlasma1();
-        }
+            /*if (Input.GetKeyDown(KeyCode.X))
+            {
+                FirePlasma1();
+            }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            DoublePlasma();
-        }*/
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                DoublePlasma();
+            }*/
 #endif
+        
     }
 
     void MoveLeft()
@@ -299,47 +308,14 @@ public class BasicControls : MonoBehaviour {
 
     void DoublePlasma()
     {
-        SpaceShipPosition += new Vector3(-1f, 0, 0f);
+        /*SpaceShipPosition += new Vector3(-1f, 0, 0f);
         ShootFire1 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);
         SpaceShipPosition += new Vector3(2f, 0, 0);
-        GameObject ShootFire2 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);
+        GameObject ShootFire2 = (GameObject)Instantiate(Resources.Load("Plasma1"), SpaceShipPosition, Quaternion.identity);*/
+        SpaceShipPosition += new Vector3(-2f, 0, 0f);
+        ShootFire1 = (GameObject)Instantiate(Resources.Load("DoublePlasma"), SpaceShipPosition, Quaternion.identity);
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "EnemyShip")
-        {
-            DestroyObject(GameObject.FindGameObjectWithTag("EnemyShip"));
-            Score += 1;
-            Instantiate(Resources.Load("Explosion"), transform.position + new Vector3(0, 0, 6), Quaternion.identity);
-            UpdateForceShieldStat();
-            PlayExplosionAudio();            
-        }
-        
-        if (collision.gameObject.tag == "ShieldUp")
-        {
-            UpgradeForceShield();
-            Destroy(GameObject.FindGameObjectWithTag("ShieldUp"));
-            PlayPowerUpAudio();
-        }
-
-        if (collision.gameObject.tag == "GoldShield")
-        {
-            GoldShieldTimer = 5f;
-            Destroy(GameObject.FindGameObjectWithTag("GoldShield"));
-            PlayPowerUpAudio();
-        }
-
-        if (collision.gameObject.tag == "LiveUp")
-        {
-            PlayerLives++;
-            Destroy(GameObject.FindGameObjectWithTag("LiveUp"));
-            PlayPowerUpAudio();
-        }
-
-
-    }
-
+    
     void ShieldBarColor()
     {        
             if (ForceShield == 3)
@@ -456,9 +432,22 @@ public class BasicControls : MonoBehaviour {
         }
     }
 
+    public void CurrentPlayerShot()
+    {
+        if (!UpgradeShot)
+        {
+            FireShoot1();
+        }
+
+        if (UpgradeShot)
+        {
+            DoublePlasma();
+        }
+    }
+
     public void UpdateForceShieldStat()
     {
-        
+                   
         if (ForceShield != 0 && !GoldForceActivated)
         {
             ForceShield--;
@@ -475,6 +464,8 @@ public class BasicControls : MonoBehaviour {
                 this.transform.position = new Vector3(0, 0, 0);
                 ForceShield = 3;
                 ShieldUpgrade = true;
+                NormalShotTimer = 0.5f;
+                UpgradeShot = false;
             }
             if( PlayerLives == 0 && ForceShield == 0)
             {
@@ -589,8 +580,8 @@ public class BasicControls : MonoBehaviour {
         {
             Level++;
             LevelMultiplier++;
-            FindObjectOfType<Spawner>().SpawnLeastWait -= Level * 0.1f;
-            FindObjectOfType<Spawner>().SpawnMostWait -= Level * 0.1f;
+            FindObjectOfType<Spawner>().SpawnLeastWait -= Level * 0.05f;
+            FindObjectOfType<Spawner>().SpawnMostWait -= Level * 0.05f;
         }
         
     }
@@ -660,10 +651,11 @@ public class BasicControls : MonoBehaviour {
 
     void GoToOptions()
     {
-        
+                   
+            Option_Canvas.gameObject.SetActive(true);
             Pause_Canvas.gameObject.SetActive(false);
             Hud_Canvas.gameObject.SetActive(false);
-            Option_Canvas.gameObject.SetActive(true);       
+
         
     }
 

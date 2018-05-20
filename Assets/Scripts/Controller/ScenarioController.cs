@@ -16,13 +16,17 @@ public class ScenarioController : MonoBehaviour {
 
     private void Update()
     {                
-        CurrentPlanet.transform.position += new Vector3(0, 0, -0.1f);
-
-        if(CurrentPlanet.transform.position.z <= -70)
+        if (!FindObjectOfType<BasicControls>().IsPaused)
         {
-            Destroy(CurrentPlanet.gameObject);
-            PlanetInstantiate();
+            CurrentPlanet.transform.position += new Vector3(0, 0, -0.1f);
+
+            if (CurrentPlanet.transform.position.z <= -70)
+            {
+                Destroy(CurrentPlanet.gameObject);
+                PlanetInstantiate();
+            }
         }
+        
         
     }   
         

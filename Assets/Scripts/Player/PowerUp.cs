@@ -7,6 +7,8 @@ public class PowerUp : MonoBehaviour {
     public GameObject ForceShieldImprove;
     public GameObject GoldForceShield;
     public GameObject LiveUp;
+    public GameObject RapidFire;
+    public GameObject DoublePlasma;
 	// Use this for initialization
 	void Start () {
 		
@@ -40,5 +42,17 @@ public class PowerUp : MonoBehaviour {
         {
             Instantiate(LiveUp, DropPos, Quaternion.identity);
         }
+
+        if (Result > 10 && Result <= 12)
+        {
+            Instantiate(RapidFire, DropPos, Quaternion.identity);
+        }
+
+        if (Result > 12 && Result <= 13)
+        {
+            Instantiate(DoublePlasma, DropPos, Quaternion.identity);
+        }
+
+
     }
 }

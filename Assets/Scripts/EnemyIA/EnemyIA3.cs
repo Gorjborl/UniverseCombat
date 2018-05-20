@@ -41,26 +41,31 @@ public class EnemyIA3 : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        InsideCombatArea();
-        SpaceShipPosition = EnemyShip.transform.position;
-
-        if (!InsideArea)
+        if ( !FindObjectOfType<BasicControls>().IsPaused)
         {
-            transform.position += new Vector3(0, 0, -0.2f);
-        } else if (InsideArea)
-        {
+            InsideCombatArea();
+            SpaceShipPosition = EnemyShip.transform.position;
 
-            EnemyShipMove();
+            if (!InsideArea)
+            {
+                transform.position += new Vector3(0, 0, -0.2f);
+            }
+            else if (InsideArea)
+            {
+
+                EnemyShipMove();
+            }
+
+
+            if (transform.position.z <= -12)
+            {
+                DestroyObject(this.gameObject);
+            }
+
+
+            ShootToPlayer();
         }
-
-
-        if (transform.position.z <= -12)
-        {
-            DestroyObject(this.gameObject);
-        }
-
-
-        ShootToPlayer();
+        
 
 
     }
@@ -94,15 +99,7 @@ public class EnemyIA3 : MonoBehaviour {
             {
 
             }
-
-
-
-        } else if (!InsideArea)
-        {
-            MovementTimer = 0;
         }
-
-
 
     }
 
@@ -145,7 +142,7 @@ public class EnemyIA3 : MonoBehaviour {
             {
                     ShootPosition = SpaceShipPosition + new Vector3(0.1f, 0, -9.5f);
                     Shot1 = (GameObject)Instantiate(Resources.Load("FireBall2"), ShootPosition, Quaternion.identity);
-                    ShotTimer = 1.1f;
+                    ShotTimer = 1.3f;
             } 
             
         }

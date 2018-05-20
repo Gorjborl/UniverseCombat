@@ -26,26 +26,31 @@ public class EnemyIA : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        SpaceShipPosition = EnemyShip.transform.position;
-        
-
-        if (!Hit)
+        if (!FindObjectOfType<BasicControls>().IsPaused)
         {
-            transform.position += new Vector3(0, 0, -0.6f);
+            SpaceShipPosition = EnemyShip.transform.position;
 
-            if (transform.position.z <= -12)
+
+            if (!Hit)
+            {
+                transform.position += new Vector3(0, 0, -0.6f);
+
+                if (transform.position.z <= -12)
+                {
+                    DestroyObject(this.gameObject);
+                }
+            }
+            else if (Hit)
             {
                 DestroyObject(this.gameObject);
             }
-        } else if (Hit)
-        {
-            DestroyObject(this.gameObject);
+
+            ShootToPlayer();
+
         }
 
-        ShootToPlayer();            
-            
-        
-	}
+
+    }
 
     void ShootToPlayer()
     {
@@ -82,5 +87,17 @@ public class EnemyIA : MonoBehaviour {
         return InsideArea;
 
     }
-        
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "PlayerShip")
+        {
+            Destroy(this.gameObject);
+            FindObjectOfType<BasicControls>().Score += 1;
+            Instantiate(Resources.Load("Explosion"), transform.position + new Vector3(0, 0, 6), Quaternion.identity);
+            FindObjectOfType<BasicControls>().UpdateForceShieldStat();
+            FindObjectOfType<BasicControls>().PlayExplosionAudio();
+        }
+    }
+
 }
