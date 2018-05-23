@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class SceneManager : MonoBehaviour {
+public class SceneManager2 : MonoBehaviour {
 
     
     public void StartGame()
     {
-        Application.LoadLevel("level1");
+        Application.LoadLevel("level2");
     }
 
     public void MainMenu()

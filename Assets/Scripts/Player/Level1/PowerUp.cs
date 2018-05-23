@@ -9,6 +9,7 @@ public class PowerUp : MonoBehaviour {
     public GameObject LiveUp;
     public GameObject RapidFire;
     public GameObject DoublePlasma;
+    public GameObject Coin;
 	// Use this for initialization
 	void Start () {
 		
@@ -51,6 +52,11 @@ public class PowerUp : MonoBehaviour {
         if (Result > 12 && Result <= 13)
         {
             Instantiate(DoublePlasma, DropPos, Quaternion.identity);
+        }
+
+        if (Result > 14 && Result <= 15)
+        {
+            Instantiate(Coin, DropPos, Quaternion.identity);
         }
 
 

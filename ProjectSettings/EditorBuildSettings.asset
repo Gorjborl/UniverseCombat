@@ -6,8 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/PreLoad.unity
+    guid: 4ebc63dc5463eb947890b85f5a094fe0
+  - enabled: 1
     path: Assets/Scenes/Intro.unity
     guid: e67275207cada2e4e9bd00a6c2d4f870
+  - enabled: 1
+    path: Assets/Scenes/HighScores.unity
+    guid: 7a143d563e881fc4fbd8ba121f584335
+  - enabled: 1
+    path: Assets/Scenes/Help.unity
+    guid: 0ffc6c69d4c2b584ab42b7d6bf48dedb
+  - enabled: 1
+    path: Assets/Scenes/Config.unity
+    guid: 9d0440a2afb397d448a0b528c78b3a8e
+  - enabled: 1
+    path: Assets/Scenes/LevelSelect.unity
+    guid: 3ec64b0ccd9a2b94faca879f4ade29ac
   - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: 0420f6df3a955c14798fbcf9a7687a20
@@ -15,9 +30,9 @@ EditorBuildSettings:
     path: Assets/Scenes/GameOver.unity
     guid: 2f9ce172e1d9b4e41ab00b6efc5c5a46
   - enabled: 1
-    path: Assets/Scenes/HighScores.unity
-    guid: 7a143d563e881fc4fbd8ba121f584335
+    path: Assets/Scenes/Level2.unity
+    guid: 440f1602695e85d4bbdc70c2aef8f5c9
   - enabled: 1
-    path: Assets/Scenes/Help.unity
-    guid: 0ffc6c69d4c2b584ab42b7d6bf48dedb
+    path: Assets/Scenes/GameOverLevel2.unity
+    guid: 72e11fd7e0be8a348a122340531deb33
   m_configObjects: {}

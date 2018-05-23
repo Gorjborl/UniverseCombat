@@ -1321,6 +1321,7 @@ MonoBehaviour:
   RapidFire: {fileID: 1140913124398746, guid: 40ac83d1eb53508479a5d010d8576501, type: 2}
   DoublePlasma: {fileID: 1537469878573224, guid: 36f29285888995647ad6e9223ee45384,
     type: 2}
+  Coin: {fileID: 1069418077491744, guid: 04a70bafc91a079489acf9d1a9c78816, type: 2}
 --- !u!114 &1066025107
 MonoBehaviour:
   m_ObjectHideFlags: 0

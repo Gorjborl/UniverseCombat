@@ -63,22 +63,20 @@ public class BasicControls : MonoBehaviour {
     
 
     // Touch Variables
-    public float sensivity = 0.035f;
+    public float sensivity;
     public float ShotTimer = 0;
     public float NormalShotTimer = 0.5f;
     Vector3 ShootPosition;
 
     private int CurrentScore = 0;
     private int startingHighScore;
-    private int startingHighScore2;
-    private int startingHighScore3;
-    private int startingHighScore4;
-    private int startingHighScore5;
+    
 
     // Use this for initialization
     void Start() {
+
         
-        SensibilitySlider.value = PlayerPrefs.GetFloat("Sensivity");
+        SensibilitySlider.value = PlayerPrefs.GetFloat("Sensivity");        
         IsPaused = IsPausedinit;
         Time.timeScale = 1;
         SoundFile = GetComponent<AudioSource>();
@@ -94,19 +92,15 @@ public class BasicControls : MonoBehaviour {
         ScoreText.text = Score.ToString();
 
         startingHighScore = PlayerPrefs.GetInt("HighScore");
-        startingHighScore2 = PlayerPrefs.GetInt("HighScore2");
-        startingHighScore3 = PlayerPrefs.GetInt("HighScore3");
-        startingHighScore4 = PlayerPrefs.GetInt("HighScore4");
-        startingHighScore5 = PlayerPrefs.GetInt("HighScore5");
 
-
+        Score = PlayerPrefs.GetInt("ContinueScore");
+        
     }
 
     // Update is called once per frame
     void Update() {
 
         PlayerPrefs.SetFloat("Sensivity", sensivity);
-
         UserInput();
         SpaceShipPosition = Ship.transform.position;
         ShipParticle.transform.position = Ship.transform.position;
@@ -134,7 +128,7 @@ public class BasicControls : MonoBehaviour {
         OptionButton.onClick.AddListener(ClickOption);
 
 
-        Debug.Log(UpgradeShot);
+        
 
 
 
@@ -580,8 +574,33 @@ public class BasicControls : MonoBehaviour {
         {
             Level++;
             LevelMultiplier++;
-            FindObjectOfType<Spawner>().SpawnLeastWait -= Level * 0.05f;
-            FindObjectOfType<Spawner>().SpawnMostWait -= Level * 0.05f;
+
+            if (Level <= 7)
+            {
+                if(FindObjectOfType<Spawner>().SpawnLeastWait >= 0)
+                {
+                    FindObjectOfType<Spawner>().SpawnLeastWait -= Level * 0.05f;
+                } else if (FindObjectOfType<Spawner>().SpawnLeastWait <= 0)
+                {
+                    FindObjectOfType<Spawner>().SpawnLeastWait = 0;
+                }
+
+                if (FindObjectOfType<Spawner>().SpawnMostWait >= 1.25f)
+                {
+                    FindObjectOfType<Spawner>().SpawnMostWait -= Level * 0.05f;
+                }
+                else
+                {
+                    FindObjectOfType<Spawner>().SpawnMostWait = 1.25f;
+                }
+
+               
+            }
+            else
+            {
+
+            }
+            
         }
         
     }
@@ -661,6 +680,7 @@ public class BasicControls : MonoBehaviour {
 
     void AdjustSensibility()
     {
+        sensivity = PlayerPrefs.GetFloat("Sensivity");
         sensivity = SensibilitySlider.value;
     }
 
@@ -669,35 +689,9 @@ public class BasicControls : MonoBehaviour {
     {
         CurrentScore = Score;
 
-        if (CurrentScore > startingHighScore)
+         if (CurrentScore > startingHighScore)
         {
-            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
-            PlayerPrefs.SetInt("HighScore4", startingHighScore3);
-            PlayerPrefs.SetInt("HighScore3", startingHighScore2);
-            PlayerPrefs.SetInt("HighScore2", startingHighScore);
             PlayerPrefs.SetInt("HighScore", CurrentScore);
-        }
-        else if (CurrentScore > startingHighScore2)
-        {
-            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
-            PlayerPrefs.SetInt("HighScore4", startingHighScore3);
-            PlayerPrefs.SetInt("HighScore3", startingHighScore2);
-            PlayerPrefs.SetInt("HighScore2", CurrentScore);
-        }
-        else if (CurrentScore > startingHighScore3)
-        {
-            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
-            PlayerPrefs.SetInt("HighScore4", startingHighScore3);
-            PlayerPrefs.SetInt("HighScore3", CurrentScore);
-        }
-        else if (CurrentScore > startingHighScore4)
-        {
-            PlayerPrefs.SetInt("HighScore5", startingHighScore4);
-            PlayerPrefs.SetInt("HighScore4", CurrentScore);
-        }
-        else if (CurrentScore > startingHighScore5)
-        {
-            PlayerPrefs.SetInt("HighScore5", CurrentScore);
         }
         
     }

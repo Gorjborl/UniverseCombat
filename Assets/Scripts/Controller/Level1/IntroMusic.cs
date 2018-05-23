@@ -27,6 +27,13 @@ public class IntroMusic : MonoBehaviour
             Destroy(this.gameObject);
             AudioBegin = false;
         }
+
+        if (Application.loadedLevelName == "Level2")
+        {
+            Audio.Pause();
+            Destroy(this.gameObject);
+            AudioBegin = false;
+        }
     }
 }
 
